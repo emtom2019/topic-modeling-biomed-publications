@@ -23,7 +23,7 @@ that is compatible with both gensim and scikit-learn.
 """
 
 class NlpForLdaInput:
-    """This class if for processing a corpus into a bag of words input that is compatible with Gensim and Scikit-learn 
+    """This class is for processing a corpus into a bag of words input that is compatible with Gensim and Scikit-learn 
     Latent Dirichlet Allocation models to keep the input constant when comparing the different implementations of LDA.
     All numbers and symbols will be removed and only words with at least 2 characters will be kept.
 
@@ -36,6 +36,8 @@ class NlpForLdaInput:
     spacy_lib : name of spacy library to be used as a string, default is 'en_core_sci_md'. This along with scispacy must be 
         downloaded from https://allenai.github.io/scispacy/
     
+    max_tok_len : integer value of maximum length of tokens. Default is 30.
+
     ngram_range : tuple of minimum to maximum number of word grams produced by the CountVectorizer class. Default is (1,1).
         This can produce bigrams and trigrams, and it can be used for both gensim and scikit-learn LDA models. However, the 
         tokenized text will not include these bigrams which is an issue when trying to calculate coherence with the gensim
@@ -53,7 +55,7 @@ class NlpForLdaInput:
 
     """
 
-    def __init__(self, data, stop_words='default', spacy_lib='en_core_sci_md', max_tok_len=15,
+    def __init__(self, data, stop_words='default', spacy_lib='en_core_sci_md', max_tok_len=30,
                     ngram_range=(1,1), bigrams=False, trigrams=False, min_df=10, max_df=0.25):
         self.data = data
         if stop_words == 'default':
@@ -113,6 +115,7 @@ class NlpForLdaInput:
         return texts
 
     def start(self, verbose=True):
+        # This method starts the processing of the corpus
         if verbose: print("Preprocessing dataset...")
         if verbose: print('Creating Tokens For Lemmetization...')
         t0 = time()
@@ -160,9 +163,11 @@ class NlpForLdaInput:
         if verbose: print("done in %0.3fs." % (time() - t0))
 
     def get_id2word(self):
+        # Returns the id2word for use with gensim packages
         return self.id2word
 
     def get_lem_text(self, corpus=None):
+        # Returns the lemmatized text
         # Optional Corpus as a list of strings to be lemmatized
         if corpus is None:
             return self.lemmatized_text
@@ -170,6 +175,7 @@ class NlpForLdaInput:
             return self.lemmatization_(corpus)
 
     def get_token_text(self, corpus=None):
+        # Returns the token text
         if corpus is None:
             return self.token_text
         else:
@@ -182,12 +188,14 @@ class NlpForLdaInput:
                 return token_text
 
     def sklearn_lda_input(self, corpus=None):
+        # Returns input for the the scikit-learn LDA model
         if corpus is None:
             return self.lda_input_data
         else:
             return self.vectorizer.transform(corpus)
 
     def gensim_lda_input(self, corpus=None):
+        # Returns input for the the gensim LDA model
         if corpus is None:
             return self.gensim_corpus_vect
         else:
@@ -197,6 +205,7 @@ class NlpForLdaInput:
         return self.vectorizer.get_feature_names()
 
     def process_new_corpus(self, corpus, verbose=True): 
+        # Run this to process a new corpus with the trained vectorizer model after running the start method
         if verbose: print('Processing new text...')
         t0 = time()
         data_tokens = self.remove_stopwords_(list(self.preprocess_(corpus)))
@@ -211,19 +220,4 @@ class NlpForLdaInput:
         return {'lem text':lem_text, 'tokens': token_text, 'sklearn':sklearn_lda_input, 'gensim':gensim_lda_input}
 
 if __name__ == "__main__": # Prevents the following code from running when importing module
-    from pprint import pprint
-    #import dataset
-    if False:
-        print("Loading dataset for data_nl_processing.py testing...")
-        t0 = time()
-        df = pd.read_csv('data/processed/data_methods_split.csv')
-        data = df["title_abstract"].tolist()
-        print("done in %0.3fs." % (time() - t0))
-
-        stop_words = set(stopwords.words('english'))
-        stop_words.update(['elsevier', 'copyright', 'rights', 'reserve', 'reserved', 'ed'])
-        nlp_data = NlpForLdaInput(data, bigrams=True, trigrams=True)
-        nlp_data.start()
-        print(nlp_data.get_token_text()[:2])
-        tf_feature_names = nlp_data.get_feature_names()
-        print(tf_feature_names)
+    pass
