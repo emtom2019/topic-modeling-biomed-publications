@@ -1,11 +1,16 @@
+# Author: Thomas Porturas <thomas.porturas.eras@gmail.com>
+
 from time import time
 import pandas as pd
 import re, gensim
 import pickle
 import matplotlib.pyplot as plt
 
-import data_nl_processing 
-from model_utilities import SilentPrinting
+# These are the import statements for the custom modules. If you want to run this file seperately, switch imports.
+from . import data_nl_processing
+from .model_utilities import SilentPrinting
+#import data_nl_processing
+#from model_utilities import SilentPrinting
 
 """
 The :mod:'optimize_mallet' module contains the CompareMalletModels class that builds multiple MALLET 
@@ -14,12 +19,12 @@ LDA models based on input parameters.
 
 class CompareMalletModels:
     """
-    This class if for building and comparing the coherence of multiple MALLET models to help fine tune the 
+    This class is for building and comparing the coherence of multiple MALLET models to help fine tune the 
     starting parameters.
 
     Parameters
     ----------
-    nlp_data : This is the processed corpus as an NlpForLdaInput object
+    nlp_data : This is the processed corpus as a fitted NlpForLdaInput object
 
     topics : a list of numbers of topics for the models to generate. Default [40]
 
@@ -44,6 +49,9 @@ class CompareMalletModels:
     a list in the self.models dictionary object. For example, the default settings model is stored as
     CompareMalletModels.models[t40a50o0i1000][0]
     
+    Use the save() method to save the model to the path variable. You can load the model by using pickle:
+        with open('path', 'rb') as model:
+            comparemalletmodels = pickle.load(model)
 
     """
     def __init__(self, nlp_data, topics=[40], alpha=[50], opt_int=[0], iterations=[1000],
@@ -180,8 +188,28 @@ class CompareMalletModels:
         return data
 
     def save(self, file_path_name):
+        # Run this to save the model
         with open(file_path_name, 'wb') as file:            
             pickle.dump(self, file)
 
-if __name__ == "__main__":
+if __name__ == "__main__": # Prevents the following code from running when importing module
     pass
+
+    #Example code:
+    """    
+    print("Loading dataset for CompareMalletModels testing...")
+    t0 = time()
+    df = pd.read_csv('data/processed/data.csv')
+    data = df["title_abstract"].tolist()
+    print("done in %0.3fs." % (time() - t0))
+
+    nlp_data = data_nl_processing.NlpForLdaInput(data)
+    nlp_data.start()
+
+    compare_mallet_models = CompareMalletModels(nlp_data=nlp_data, topics=[40], alpha=[5, 50], 
+        opt_int=[0,200], iterations=[1000], repeats=10)
+    compare_mallet_models.start()
+    compare_mallet_models.save('models/comparemalletmodels_test')
+    compare_mallet_models.output_dataframe(save=True, path='reports/comparemalletmodels_test_coh.csv')
+    compare_mallet_models.graph_results(save=True, path='reports/figures/comparemalletmodels_test_fig.png')
+    """

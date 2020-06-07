@@ -1,13 +1,37 @@
+# Author: Thomas Porturas <thomas.porturas.eras@gmail.com>
+
 from time import time
 
 import pandas as pd
+import numpy as np
 import re
 
-# Data Preprocessing class
-# Allows for filtering rows and copying and deleting text within columns
+"""
+The :mod:'data_preprocessing' module contains the process_files() function and CleanData class.
+The process_files() function can combine raw CSV file output from the ovid database and process them into 
+files usable by the topic models in this project.
+The CleanData class can be used to edit the processed data and filter out entries based on text content 
+and cut and paste text segments.
+"""
 
 class CleanData:
-    def __init__(self, data='data/external/data_cleaned.csv'):
+    """
+    This class is for editing the processed data allowing you to filter out entries based on input strings
+    and copying, cutting and pasting text surrounding keywords.
+
+    Parameters
+    ----------
+    data : Path to the processed data as a csv file.
+
+
+    Note: This class was meant to help split the abstacts to perform topic modeling on just
+    the methods or introduction and conclusion segments of the abstracts. It introduced 
+    an issue for topic modeling since we lost a significant portion of the corpus and the 
+    resulting topics appeared to be of lower quality than the analysis on the
+    complete abstract.
+
+    """
+    def __init__(self, data):
         self.df_data = pd.read_csv(data)
         self.processed_data = None
 
@@ -84,11 +108,93 @@ class CleanData:
         self.df_data.to_csv(file_path_name, index=False)
         print("Data saved to: " + file_path_name)
 
+def process_files(paths, header_row=1, entry_types='Article|Conference Abstract|Conference Paper', 
+                    fill_unknown_years=False, remove_unknown_years=True):
+    """
+    This function returns a processed dataframe that is compatible with this topic modeling project.
+    It processes a single or multiple raw csv files to produce a single dataframe that contains all of
+    the data required for topic modeling in this project.
+
+    Note: The raw files are assumed to be complete citation entries downloaded from the OVID database and at the 
+    minimum the following columns must be present: 'PT', 'AB', 'SO', 'TI','YR'. When downloading, the file will be
+    an excel file, use save as to convert to a csv file.
+
+    Parameters
+    ----------
+    paths : List of paths to the raw csv files
+
+    header_row : the integer row number containing the column titles. 0 is the first row. In the default OVID files 
+        the 2nd row or row '1' contains the header. Default 1
+
+    entry_types : string as a regular expression of the keywords of types of articles to include seperated by '|'. 
+        Default 'Article|Conference Abstract|Conference Paper'
+
+    fill_unknown_years : Boolean. Requires column 'DC' to be present in the raw file. Attempts to replace missing 'YR' entries
+        with data from the 'DC' column (date created). Otherwise missing years are replaced with 0. Default False
+
+    remove_unknown_years : Boolean. Removes all entries with unknown years of publications or 'YR' = NAN. Default True
+
+    This function will returns a pandas dataframe
+
+    """
+    df_main = pd.DataFrame(columns=["abstract", "journal", "title", "year"])
+    entry_set = []
+    for i, path in enumerate(paths):
+        df_raw = pd.read_csv(path, header=header_row, index_col=0)
+        print('File {} raw file header:'.format(i+1))
+        print(df_raw.head(n=2))
+        # Fill in NA values, Empty years will be replaced with a year from another column (DC)
+        df_raw['PT'].fillna(u'NA', inplace=True)
+        df_raw['YR'].fillna(int(0), inplace=True)
+        entry_set.extend(df_raw['PT'].tolist())
+        if fill_unknown_years: # Requires column 'DC' to be present in raw file
+            year_replace = [int(x[0:4]) for x in df_raw['DC'].astype(str).tolist()]
+            df_raw['YR'] = np.where(df_raw['YR'] == 0, year_replace, df_raw['YR'])
+        if remove_unknown_years:
+            df_raw = df_raw[df_raw['YR']!=0]
+        # Filter in entries by entry type
+        df = df_raw[df_raw['PT'].str.contains(entry_types)]
+        df = df.filter(items = ['AB', 'SO', 'TI','YR'])
+        df['SO'] = df['SO'].str.split(r'\.|=').str[0]
+        df = df.rename(index=str, columns={"AB": "abstract", "SO": "journal", "TI": "title", "YR":"year"})
+        
+        
+        print('File {} processed file Header:'.format(i+1))
+        print(df.head(n=2))
+        df_main = df_main.append(df, ignore_index=True)
+
+    df_main = df_main.reset_index()
+    print("All entry types present in raw files:")
+    print(set(entry_set)) # This prints all variations of entry types present in column PT
+
+    df_main['title_abstract'] = df_main[['title', 'abstract']].apply(lambda x: ' '.join(x.astype(str)), axis=1)
+    df_main = df_main.filter(items = ['title', 'abstract', 'title_abstract', 'journal', 'year'])
+    df_main = df_main.reset_index(drop=True)
+    
+    print('')
+    print('Number of entries: {}'.format(len(df_main.index)))
+    print('Final file Header:')
+    print(df_main.head(n=2))
+    return df_main
+
 if __name__ == "__main__": # Prevents the following code from running when importing module
-    #import dataset
+    pass
+
+    # Example usage of process_files() function
+    """
+    paths = [
+        'data/raw/rawdata1.csv',
+        'data/raw/rawdata2.csv',
+        ]
+    df = process_files(paths, entry_types='Article')
+    df.to_csv('data/processed/processed_data.csv',index=False)
+    """
+
+    # Example usage of CleanData class
+    """
     print("Loading dataset...")
     t0 = time()
-    data = CleanData(data='data/external/data_cleaned.csv')
+    data = CleanData(data='data/processed/data.csv')
     print("done in %0.3fs." % (time() - t0))
 
     num_rows = len(data.df_data.index)
@@ -133,3 +239,4 @@ if __name__ == "__main__": # Prevents the following code from running when impor
                     )
     print("done in %0.3fs." % (time() - t0))
     data.save_data('data/external/data_methods_split.csv')
+    """

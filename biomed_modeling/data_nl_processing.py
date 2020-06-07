@@ -1,4 +1,4 @@
-# Author: Thomas Porturas <portomy@gmail.com>
+# Author: Thomas Porturas <thomas.porturas.eras@gmail.com>
 
 # For measuring time
 from time import time
@@ -33,30 +33,38 @@ class NlpForLdaInput:
 
     stop_words : list of stop word strings, default is the standard nltk.corpus + several words that were used in my project
 
-    spacy_lib : name of spacy library to be used as a string, default is 'en_core_sci_md'. This along with scispacy must be 
-        downloaded from https://allenai.github.io/scispacy/
+    spacy_lib : name of spacy library to be used as a string, default is 'en_core_sci_lg'. This along with scispacy must be 
+        downloaded from https://allenai.github.io/scispacy/ if it is not installed. Other libraries may be used, please 
+        see the spaCy documentation at https://spacy.io/ 
     
     max_tok_len : integer value of maximum length of tokens. Default is 30.
 
     ngram_range : tuple of minimum to maximum number of word grams produced by the CountVectorizer class. Default is (1,1).
         This can produce bigrams and trigrams, and it can be used for both gensim and scikit-learn LDA models. However, the 
         tokenized text will not include these bigrams which is an issue when trying to calculate coherence with the gensim
-        gensim.models.CoherenceModel class using 'c_v', and wil lproduce inaccurate results. Instead use the bigrams and trigrams
+        gensim.models.CoherenceModel class using 'c_v', and will produce inaccurate results. Instead use the bigrams and trigrams
         parameters.
 
-    bigrams : Boolean, default is false. Bigrams will be generated when true and will be present with method get_token_text().
+    bigrams : Boolean, default is True. Bigrams will be generated when true and will be present with method get_token_text().
 
-    trigrams : Boolean, default is false. Trigrams will be generated when true and will be present with method get_token_text().
+    trigrams : Boolean, default is True. Trigrams will be generated when true and will be present with method get_token_text().
         Note, bigrams must be set to True to enable Trigrams
 
     min_df : integer, default is 10. Ignores tokens that appear in less than min_df number of documents when building vocabulary
     
     max_df : float, default is 0.25. Ignores tokens that appear in more than max_df proportion of documents when building vocabulary
 
+    You will need to run the start() method to process the text and fit the model. 
+    
+    For gensim LDA models and the gensim LDA Mallet wrapper you will need to use the get_id2word() and gensim_lda_input() methods 
+    to get the id2word and corpus parameters respectively. For the sklearn LDA model, you will only need the sklearn_lda_input() 
+    method for the X parameter when running the fit() method of the LatentDirichletAllocation class. All the models in this 
+    package will only ask for the reference to the fitted NlpForLdaInput object.
+
     """
 
-    def __init__(self, data, stop_words='default', spacy_lib='en_core_sci_md', max_tok_len=30,
-                    ngram_range=(1,1), bigrams=False, trigrams=False, min_df=10, max_df=0.25):
+    def __init__(self, data, stop_words='default', spacy_lib='en_core_sci_lg', max_tok_len=30,
+                    ngram_range=(1,1), bigrams=True, trigrams=True, min_df=10, max_df=0.25):
         self.data = data
         if stop_words == 'default':
             self.stopwords = set(stopwords.words('english'))
@@ -155,11 +163,6 @@ class NlpForLdaInput:
         self.gensim_corpus_vect = gensim.matutils.Sparse2Corpus(self.lda_input_data, documents_columns=False)
         self.id2word = Dictionary.from_corpus(self.gensim_corpus_vect, 
                 id2word=dict((idn, word) for word, idn in self.vectorizer.vocabulary_.items()))
-
-        if verbose: print(self.vectorizer)
-        #checking sparcity because it was in my tutorial (is this an important thing?)
-        data_dense = self.lda_input_data.todense()
-        if verbose: print('Sparcity: ', ((data_dense > 0).sum()/data_dense.size)*100, '%')
         if verbose: print("done in %0.3fs." % (time() - t0))
 
     def get_id2word(self):

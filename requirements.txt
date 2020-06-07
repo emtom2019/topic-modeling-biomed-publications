@@ -1,0 +1,98 @@
+astroid @ file:///D:/bld/astroid_1588698402201/work
+attrs==19.3.0
+awscli==1.18.68
+blis==0.4.1
+boto==2.49.0
+boto3 @ file:///home/conda/feedstock_root/build_artifacts/boto3_1590526886557/work
+botocore==1.16.18
+brotlipy==0.7.0
+bz2file==0.98
+cachetools @ file:///home/conda/feedstock_root/build_artifacts/cachetools_1589982006730/work
+catalogue==1.0.0
+certifi==2020.4.5.1
+cffi==1.14.0
+chardet==3.0.4
+colorama==0.4.3
+conllu==3.0
+cryptography==2.9.2
+cycler==0.10.0
+cymem==2.0.3
+docutils==0.15.2
+en-core-sci-lg @ https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.2.4/en_core_sci_lg-0.2.4.tar.gz
+funcy==1.14
+future==0.18.2
+gensim==3.8.1
+google-api-core==1.17.0
+google-auth @ file:///home/conda/feedstock_root/build_artifacts/google-auth_1589308667779/work
+google-cloud-core==1.3.0
+google-cloud-storage @ file:///home/conda/feedstock_root/build_artifacts/google-cloud-storage_1588781939053/work
+google-resumable-media==0.5.0
+googleapis-common-protos==1.51.0
+idna==2.9
+importlib-metadata==1.6.0
+isort==4.3.21
+Jinja2==2.11.2
+jmespath @ file:///home/conda/feedstock_root/build_artifacts/jmespath_1589369830981/work
+joblib @ file:///home/conda/feedstock_root/build_artifacts/joblib_1589812474002/work
+jsonschema==3.2.0
+kiwisolver==1.2.0
+lazy-object-proxy==1.4.3
+MarkupSafe==1.1.1
+matplotlib==3.1.3
+mccabe==0.6.1
+mkl-service==2.3.0
+murmurhash==1.0.0
+nltk==3.4.4
+nmslib==2.0.6
+numexpr==2.7.1
+numpy==1.17.5
+olefile==0.46
+pandas==0.25.3
+patsy==0.5.1
+Pillow==7.1.2
+plac==0.9.6
+preshed==3.0.2
+protobuf==3.12.1
+psutil==5.7.0
+pyasn1==0.4.8
+pyasn1-modules==0.2.7
+pybind11==2.5.0
+pycparser==2.20
+pyLDAvis==2.1.2
+pylint @ file:///D:/bld/pylint_1588950565778/work
+pyOpenSSL==19.1.0
+pyparsing==2.4.7
+PyQt5==5.12.3
+PyQt5-sip==4.19.18
+PyQtChart==5.12
+PyQtWebEngine==5.12.1
+pyrsistent==0.16.0
+pysbd==0.2.3
+PySocks==1.7.1
+python-dateutil==2.8.1
+pytz==2020.1
+PyYAML==5.3.1
+requests==2.23.0
+rsa==3.4.2
+s3transfer==0.3.3
+scikit-learn==0.22.2.post1
+scipy==1.3.1
+scispacy==0.2.4
+seaborn==0.10.1
+six @ file:///home/conda/feedstock_root/build_artifacts/six_1590081179328/work
+smart-open==2.0.0
+spacy @ file:///D:/bld/spacy_1589387720787/work
+srsly @ file:///D:/bld/srsly_1589222535061/work
+statsmodels==0.11.1
+thinc==7.4.0
+toml @ file:///home/conda/feedstock_root/build_artifacts/toml_1589469402899/work
+tornado==6.0.4
+tqdm @ file:///home/conda/feedstock_root/build_artifacts/tqdm_1588513834538/work
+typed-ast==1.4.1
+urllib3==1.25.9
+wasabi==0.6.0
+win-inet-pton==1.1.0
+wincertstore==0.2
+wordcloud==1.6.0
+wrapt==1.11.2
+zipp==3.1.0
