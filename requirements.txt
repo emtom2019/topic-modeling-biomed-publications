@@ -42,7 +42,7 @@ matplotlib==3.1.3
 mccabe==0.6.1
 mkl-service==2.3.0
 murmurhash==1.0.0
-nltk==3.4.4
+nltk==3.4.5
 nmslib==2.0.6
 numexpr==2.7.1
 numpy==1.17.5
