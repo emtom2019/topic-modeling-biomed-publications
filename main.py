@@ -103,4 +103,4 @@ class main:
                 main_path=main_path, year_start=1980, year_res=5)
 
 if __name__ == "__main__":
-    main()
+    main(run_step1=True, run_step2=True, run_step3=True, run_step4=True, run_step5=True)

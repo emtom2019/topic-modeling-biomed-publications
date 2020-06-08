@@ -7,7 +7,7 @@ from time import time
 import pandas as pd
 import spacy
 import scispacy # Not sure if import necessary, but you need to install it for the 'en_core_sci_md' library
-from nltk.corpus import stopwords
+
 
 # Gensim
 import gensim
@@ -16,6 +16,9 @@ from gensim.corpora.dictionary import Dictionary
 # sklearn
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.decomposition import LatentDirichletAllocation
+
+# custom stop_words module containing stopwords from the nltk package (not installed)
+from .stopword_lists import NLTK_STOPWORDS
 
 """
 The :mod:'data_nl_processing' module contains the NlpForLdaInput class that provides natural language processing for LDA model input
@@ -67,7 +70,7 @@ class NlpForLdaInput:
                     ngram_range=(1,1), bigrams=True, trigrams=True, min_df=10, max_df=0.25):
         self.data = data
         if stop_words == 'default':
-            self.stopwords = set(stopwords.words('english'))
+            self.stopwords = set(NLTK_STOPWORDS)
             self.stopwords.update(['elsevier', 'copyright'])
         else:
             self.stopwords = stop_words

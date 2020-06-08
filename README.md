@@ -1,6 +1,6 @@
 # topic-modeling-biomed-publications
  This is a set of tools to analyze biomedical publications using Latent Dirichlet Allocation topic modeling.
-    Version 1.0
+    Version 1.1.0
 
 Installation instructions:
     -This project was built on a windows machine and the instructions may not be correct for mac or linux
