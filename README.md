@@ -1,6 +1,7 @@
 # topic-modeling-biomed-publications
+ Version 1.1.0
  This is a set of tools to analyze biomedical publications using Latent Dirichlet Allocation topic modeling.
-    Version 1.1.0
+    
 
 Installation instructions:
     -This project was built on a windows machine and the instructions may not be correct for mac or linux
@@ -35,3 +36,5 @@ Usage instructions:
 - To use your own dataset, search the OVID database for your criteria. Export the results as an excel file and either select complete reference or custom. If custom make sure you select 'PT' (publication type), 'AB' (abstract), 'SO' (source), 'TI' (title),'YR' (year of publication), and 'DC' (date created). If there is a limit to the number of entries you can download at once, you can group articles by year and download them seperately. Open each file and save as a .csv file. The process_files() function will combine them into a single file. Change the code as you see fit to use your dataset instead of the example datasets.
 
 The code was written with the aid of the documentation for python and the individual packages, google, stackoverflow, and https://www.machinelearningplus.com/
+
+You can contact Thomas Porturas <thomas.porturas.eras@gmail.com> with any questions and I will try to get back to you when I can.
