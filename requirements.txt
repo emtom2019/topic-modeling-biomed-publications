@@ -31,7 +31,7 @@ googleapis-common-protos==1.51.0
 idna==2.9
 importlib-metadata @ file:///D:/bld/importlib-metadata_1591451928112/work
 isort==4.3.21
-Jinja2==2.11.2
+Jinja2==2.11.3
 jmespath @ file:///home/conda/feedstock_root/build_artifacts/jmespath_1589369830981/work
 joblib @ file:///home/conda/feedstock_root/build_artifacts/joblib_1589812474002/work
 jsonschema==3.2.0
