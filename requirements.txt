@@ -88,7 +88,7 @@ toml @ file:///home/conda/feedstock_root/build_artifacts/toml_1589469402899/work
 tornado==6.0.4
 tqdm @ file:///home/conda/feedstock_root/build_artifacts/tqdm_1591181521996/work
 typed-ast==1.4.1
-urllib3==1.25.9
+urllib3==1.26.5
 wasabi==0.6.0
 win-inet-pton==1.1.0
 wincertstore==0.2
