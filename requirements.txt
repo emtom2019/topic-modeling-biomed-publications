@@ -44,7 +44,7 @@ mkl-service==2.3.0
 murmurhash==1.0.0
 nmslib==2.0.6
 numexpr @ file:///D:/bld/numexpr_1591280480683/work
-numpy==1.17.5
+numpy==1.22.0
 olefile==0.46
 pandas==0.25.3
 patsy==0.5.1
