@@ -51,7 +51,7 @@ patsy==0.5.1
 Pillow==7.1.2
 plac==0.9.6
 preshed==3.0.2
-protobuf==3.12.3
+protobuf==3.18.3
 psutil==5.7.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.7
